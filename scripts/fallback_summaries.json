@@ -1,0 +1,23 @@
+{
+  "_note": "One-line summaries for operations whose OpenAPI entry has no summary or description. The generator prefers the spec. Delete an entry once the spec carries its own summary.",
+  "verify_email": "Check whether one email address can receive mail, including catch-all analysis.",
+  "enrich": "Find a person's work email, mobile or profile from an email, LinkedIn URL, or name and company.",
+  "find_leads": "Find people who match an audience description and filters.",
+  "find_intent": "Find hiring, funding, news and job-change signals for a list of company domains.",
+  "check_companies": "Answer one yes or no question about each company in a list, with evidence.",
+  "find_companies": "Find companies that match a description and filters.",
+  "enrich_company": "Get profile, technology, funding or relationship data for one company domain.",
+  "find_posts": "Find social posts by topic, author or company, or the people engaging with given posts.",
+  "setup_sending": "Quote, then buy after human approval, warmed domains and mailboxes for sending.",
+  "create_campaign": "Create a draft email campaign with leads and sequence steps. Nothing sends yet.",
+  "add_leads": "Add leads to a campaign. Adding to an active campaign needs human approval.",
+  "launch_campaign": "Launch a draft campaign. Returns a preview first. A person approves before anything sends.",
+  "get_replies": "List campaign replies, newest first. Free.",
+  "get_reply": "Read one reply in full, including its body and lead state. Free.",
+  "set_lead_status": "Record a lead's interest status, such as interested or meeting_booked. Free.",
+  "reply_to_thread": "Reply in an existing thread. Returns a preview first. A person approves before it sends.",
+  "research_company": "Run source-backed research on one company in the background.",
+  "prospect_picture": "Build one picture of a person, a company, or both, in the background.",
+  "llm": "Chat with a hosted model through Layrcake.",
+  "get_operation": "Read the state, progress and result of a background operation."
+}

@@ -1,0 +1,111 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "layrcake"
+version = "0.1.0"
+description = "Official Python SDK for the Layrcake API. Go-to-market infrastructure for AI agents."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Layrcake" }]
+requires-python = ">=3.9"
+dependencies = ["httpx>=0.23.0,<1"]
+keywords = [
+    "layrcake",
+    "ai",
+    "agents",
+    "mcp",
+    "sales",
+    "prospecting",
+    "lead-generation",
+    "email-verification",
+    "claude",
+    "chatgpt",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Office/Business",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://layrcake.dev"
+Documentation = "https://docs.layrcake.dev"
+Source = "https://github.com/Layrcake-dev/layrcake-python"
+Issues = "https://github.com/Layrcake-dev/layrcake-python/issues"
+Changelog = "https://github.com/Layrcake-dev/layrcake-python/blob/main/CHANGELOG.md"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-asyncio>=0.23",
+    "respx>=0.21",
+    "mypy>=1.10",
+    "ruff>=0.6",
+    "twine>=5",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/layrcake"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/layrcake",
+    "tests",
+    "examples",
+    "scripts",
+    "openapi.json",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "pyproject.toml",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "-ra --strict-markers"
+filterwarnings = ["error"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["src", "tests", "examples", "scripts"]
+warn_unreachable = true
+warn_unused_ignores = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+
+[tool.ruff.format]
+# Generated code is laid out by scripts/generate.py, and check-generated keeps it exact.
+exclude = ["src/layrcake/_generated/*"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF", "A", "C4", "PIE", "PT", "RET"]
+ignore = [
+    "UP006",  # keep typing.List/Dict so annotations evaluate on Python 3.9
+    "UP007",  # keep typing.Union/Optional for the same reason
+    "UP035",
+    "UP045",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011"]
+"src/layrcake/_generated/*" = ["E501", "UP013", "RUF001", "RUF002", "RUF003"]
