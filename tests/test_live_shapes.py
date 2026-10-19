@@ -1,7 +1,7 @@
 """Regression tests for body shapes seen on the live API (2026-10-18).
 
 The live API wraps some bodies in {"result": ...} that the spec describes as
-flat or not at all. The SDK unwraps by shape. See SPEC-ISSUES.md.
+flat or not at all. The SDK unwraps by shape.
 """
 
 from __future__ import annotations

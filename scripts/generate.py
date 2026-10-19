@@ -124,7 +124,7 @@ SUPPLEMENTAL_QUERY: dict[str, list[dict[str, Any]]] = {
 # At runtime every JSON body shaped {result} or {result, layrcake} is unwrapped,
 # whatever the spec says. "wrapped" records where the spec describes a flat
 # body (or none) although the API wraps it; "flat" marks bodies never unwrapped.
-# See SPEC-ISSUES.md. The generator fails when the spec starts describing an
+# The generator fails when the spec starts describing an
 # envelope that a "wrapped" override still patches, so stale overrides get removed.
 RESPONSE_OVERRIDES: dict[str, dict[str, Any]] = {
     # The spec describes a flat body. Live, the body is {"result": {...}}.
