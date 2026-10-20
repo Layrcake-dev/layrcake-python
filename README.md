@@ -2,7 +2,7 @@
 
 Go-to-market infrastructure for AI agents: find leads, enrich and verify emails, read buying signals, research companies, and run email campaigns that a person approves before anything sends.
 
-This is the official Python client for the [Layrcake API](https://docs.layrcake.dev). It has one dependency, [httpx](https://www.python-httpx.org). It works on Python 3.9 or later, with a sync client and an asyncio client. Every request and response is typed.
+This is the official Python client for the [Layrcake API](https://docs.layrcake.dev). It has one dependency, [httpx](https://www.python-httpx.org); the optional `agents` extra adds pydantic for the agent tools. It works on Python 3.9 or later, with a sync client and an asyncio client. Every request and response is typed.
 
 ## Install
 
@@ -252,6 +252,36 @@ if approval is not None:
 ```
 
 `approval_required` returns `None` when nothing waits on a person. The SDK never approves anything and has no way to.
+
+## Agent tools
+
+`layrcake.agent_tools` gives an AI agent eight Layrcake tools that follow the rules in [layrcake.dev/agents.md](https://layrcake.dev/agents.md), for any framework. The LangChain, LlamaIndex and CrewAI packages and the OpenAI Agents and LangGraph starters are thin adapters over it. Install it with the `agents` extra, which adds pydantic:
+
+```sh
+pip install "layrcake[agents]"
+```
+
+```python
+from layrcake.agent_tools import TOOL_SPECS, LayrcakeSession
+
+session = LayrcakeSession(budget_credits=50)  # one per agent run; reads LAYRCAKE_API_KEY
+for spec in TOOL_SPECS:  # hand these to your framework
+    print(spec.name, spec.description, spec.args.model_json_schema())
+
+print(session.call("find_leads", {"audience": "Heads of sales in London", "titles": ["Head of Sales"]}))
+```
+
+The tools are `find_leads`, `enrich`, `verify_email`, `check_companies`, `research_company`, `create_campaign`, `launch_campaign` and `get_me`. Each `ToolSpec` has a `name`, a `description` that states the price, and `args`, a pydantic model matching the request types in `layrcake.types`. `session.call(name, arguments)` validates the model's raw arguments, runs the tool and returns the text the model reads. It never raises: bad arguments, API errors and refusals come back as text starting with `Refused:`, so the model can fix the call or stop.
+
+One session holds one run's rules:
+
+- Every paid call carries the budget that is left as `budget_credits`. No paid call starts once the run budget is spent. Paid calls run one at a time, so the budget stays exact under parallel tool calls.
+- `dry_run=True` reaches every call. Each returns the most it could cost and charges nothing.
+- Every call sends an idempotency key made from `run_id`, the verb and a hash of its arguments. Reuse `run_id` to resume a run without paying twice.
+- `create_campaign` takes only addresses `verify_email` kept in this run, unless `require_verified=False`.
+- `launch_campaign` has no `confirmation_token` argument. It returns a preview and an approval link, drops the token from what the model reads, and refuses every paid call after it. A person approves in the Layrcake console.
+
+After a run, `session.spent`, `session.found`, `session.verified`, `session.catch_all`, `session.approval_url` and `session.launch_error` say what happened. `AsyncLayrcakeSession` is the same on an `AsyncLayrcake` client, with `call` and `run` as coroutines. Both also have one method per verb, such as `session.verify_email(VerifyEmailArgs(email=...))`, which raises `Refused` or `LayrcakeError` instead of returning text.
 
 ## Pricing
 
